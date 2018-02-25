@@ -7,13 +7,13 @@
     tools:context="nanterre.paris10.miage.kami_game.LevelActivity">
 
     <GridView
-        android:id="@+id/GridView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="24dp"
-        android:stretchMode="spacingWidthUniform"
-        android:columnWidth="100dp"
-        android:numColumns="auto_fit" />
+    android:id="@+id/GridView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:horizontalSpacing="10dp"
+    android:verticalSpacing="24dp"
+    android:stretchMode="spacingWidthUniform"
+    android:columnWidth="100dp"
+    android:numColumns="auto_fit" />
 </RelativeLayout>

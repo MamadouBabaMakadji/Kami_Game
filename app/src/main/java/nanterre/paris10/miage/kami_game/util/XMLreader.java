@@ -19,9 +19,9 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class XMLreader {
 
-    private static String file;
+    private static File file;
 
-    public XMLreader(String file) {
+    public XMLreader(File file) {
         this.file = file;
     }
 
@@ -29,10 +29,9 @@ public class XMLreader {
         String colours = "vide";
         int matrice[][] = null;
         try {
-            File fXmlFile = new File(file);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(fXmlFile);
+            Document doc = dBuilder.parse(file);
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getElementsByTagName("PuzzleData");
             Node node = nodeList.item(0);

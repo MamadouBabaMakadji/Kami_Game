@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import nanterre.paris10.miage.kami_game.stageA.SAL1Activity;
 import nanterre.paris10.miage.kami_game.views.LevelAdapter;
 
 public class LevelActivity extends AppCompatActivity {
@@ -31,9 +32,9 @@ public class LevelActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Item : "+i, Toast.LENGTH_LONG).show();
                 switch (i){
                     case 0:
-                        /*intent = new Intent(LevelActivity.this, SAL1Activity.class);
-                        intent.putExtra("niveau", i);
-                        startActivity(intent);*/
+                        intent = new Intent(LevelActivity.this, SAL1Activity.class);
+                        intent.putExtra("Level", i);
+                        startActivity(intent);
                         break;
                     case 1:
                        /* intent = new Intent(LevelActivity.this, SAL1Activity.class);

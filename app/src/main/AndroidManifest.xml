@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".stageA.SAL1Activity" />
-        <activity android:name=".LevelActivity"></activity>
+        <activity android:name=".LevelActivity" />
     </application>
 
 </manifest>
