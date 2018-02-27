@@ -1,10 +1,7 @@
-package nanterre.paris10.miage.kami_game.views;
+package nanterre.paris10.miage.kami_game.adapter;
 
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.view.LayoutInflater;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -14,21 +11,22 @@ import android.widget.TextView;
 import nanterre.paris10.miage.kami_game.R;
 
 /**
- * Created by Mamadou BABA on 21/02/2018.
+ * Created by Mamadou BABA on 16/02/2018.
  */
 
-public class PuzzleAdapter extends BaseAdapter {
-    private Context context;
-    private int[] puzzle;
+public class LevelAdapter extends BaseAdapter {
 
-    public PuzzleAdapter(Context context, int[] puzzle) {
+    private Context context;
+    private int niveaux[];
+
+    public LevelAdapter(Context context, int[] niveaux) {
         this.context = context;
-        this.puzzle = puzzle;
+        this.niveaux = niveaux;
     }
 
     @Override
     public int getCount() {
-        return puzzle.length;
+        return niveaux.length;
     }
 
     @Override
@@ -45,15 +43,12 @@ public class PuzzleAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null){
             LayoutInflater inflater = LayoutInflater.from(context);
-            view = inflater.inflate(R.layout.cell,null);
+            view = inflater.inflate(R.layout.niveau, null);
         }
         ImageView imageView = view.findViewById(R.id.image);
-        imageView.setImageResource(puzzle[i]);
-        if (puzzle[i] == 1) {
-            imageView.setBackgroundColor(Color.BLUE);
-        } else{
-            imageView.setBackgroundColor(Color.MAGENTA);
-        }
+        TextView textView = view.findViewById(R.id.niveau);
+        imageView.setImageResource(R.drawable.puzzle);
+        textView.setText("Niveau "+((getCount()+i+1) - getCount()));
 
         return view;
     }

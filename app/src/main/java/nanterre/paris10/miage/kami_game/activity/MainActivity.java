@@ -1,10 +1,12 @@
-package nanterre.paris10.miage.kami_game;
+package nanterre.paris10.miage.kami_game.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageButton;
+
+import nanterre.paris10.miage.kami_game.R;
 
 public class MainActivity extends AppCompatActivity {
 

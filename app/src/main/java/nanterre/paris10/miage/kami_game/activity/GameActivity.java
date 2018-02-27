@@ -1,14 +1,17 @@
-package nanterre.paris10.miage.kami_game.stageA;
+package nanterre.paris10.miage.kami_game.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashSet;
 
@@ -16,18 +19,17 @@ import nanterre.paris10.miage.kami_game.R;
 import nanterre.paris10.miage.kami_game.views.ButtonView;
 import nanterre.paris10.miage.kami_game.views.PuzzleView;
 
-public class SAL1Activity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
     private PuzzleView puzzleView;
     private ImageButton img_btn_refresh;
     private ImageButton img_btn_info;
     private TextView nb_tentatives;
     private int[] puzzle;
-    private PuzzleView[] puzzle_rect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sal1);
+        setContentView(R.layout.activity_game);
         setTitle("Level 1");
         img_btn_info = findViewById(R.id.btn_info);
         img_btn_refresh = findViewById(R.id.btn_refresh);
@@ -36,9 +38,35 @@ public class SAL1Activity extends AppCompatActivity {
         nb_tentatives.setTextSize(35);
         nb_tentatives.setTextColor(Color.BLACK);
         puzzle = getPuzzle();
-        this.puzzleView = new PuzzleView(this, puzzle);
+        puzzleView = new PuzzleView(this, puzzle);
+        img_btn_refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                restartGame();
+            }
+        });
+        img_btn_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog info = new AlertDialog.Builder(GameActivity.this).create();
+                info.setTitle("About Game");
+                info.setMessage("");
+                info.setButton(AlertDialog.BUTTON_POSITIVE, "The aim of this game is to have the same color in all surface", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                info.show();
+            }
+        });
         afficherPuzzle();
         afficherButtons();
+    }
+
+    private void restartGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
     }
 
     private int[] getPuzzle() {
@@ -64,7 +92,7 @@ public class SAL1Activity extends AppCompatActivity {
     private void afficherButtons(){
         LinearLayout btn_layout = findViewById(R.id.buttonLayout);
         btn_layout.removeAllViews();
-        for (int color : getDifferentColors()){
+        //for (int color : getDifferentColors()){
             ButtonView buttonView = new ButtonView(this);
             buttonView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -77,12 +105,13 @@ public class SAL1Activity extends AppCompatActivity {
             buttonView.setPadding(1, 1, 1, 1);
 
                 btn_layout.addView(buttonView);
-        }
+        //}
     }
 
     private void afficherPuzzle() {
-        LinearLayout gridPuzzle = findViewById(R.id.puzzleGridView);
+        final LinearLayout gridPuzzle = findViewById(R.id.puzzleGridView);
         gridPuzzle.removeAllViews();
+        GridView gridView = gridPuzzle.findViewById(R.id.GridView);
         gridPuzzle.addView(puzzleView);
     }
 

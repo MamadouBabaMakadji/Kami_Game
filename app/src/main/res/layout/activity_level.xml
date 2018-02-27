@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="nanterre.paris10.miage.kami_game.LevelActivity">
+    tools:context="nanterre.paris10.miage.kami_game.activity.LevelActivity">
 
     <GridView
     android:id="@+id/GridView"
