@@ -18,6 +18,8 @@
         </activity>
         <activity android:name=".activity.GameActivity" />
         <activity android:name=".activity.LevelActivity" />
+        <activity android:name=".activity.PlayerChoiceActivity" />
+        <activity android:name=".activity.NewPlayerActivity"></activity>
     </application>
 
 </manifest>

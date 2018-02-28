@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/btn_start"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="nanterre.paris10.miage.kami_game.activity.MainActivity">
@@ -14,7 +13,24 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp"
         app:srcCompat="@drawable/kami" />
+
+    <Button
+        android:id="@+id/btn_exploration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:text="Mode exploration" />
+
+    <Button
+        android:id="@+id/btn_aventure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_exploration"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:text="mode aventure" />
 
 </RelativeLayout>
