@@ -16,11 +16,14 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import nanterre.paris10.miage.kami_game.R;
 import nanterre.paris10.miage.kami_game.adapter.ChoixCouleurAdapter;
 import nanterre.paris10.miage.kami_game.adapter.RectAdapter;
+import nanterre.paris10.miage.kami_game.data.Player;
+import nanterre.paris10.miage.kami_game.data.PlayerDAO;
 import nanterre.paris10.miage.kami_game.util.Game;
 import nanterre.paris10.miage.kami_game.util.XmlReader;
 
@@ -31,17 +34,19 @@ public class GameActivity extends AppCompatActivity {
     private Game game;
     private GridView gridView;
     private GridView gridButtonColor;
-    private int[] diffColor;
+    private ArrayList<Integer> diffColor;
     private int selectColor = 0;
     private RectAdapter adapter;
-    private int nb_coup_max = 1;
     private int couleurCliquer;
     private boolean winOrLose = false;
+    private long playerID;
+    private PlayerDAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        playerID = getIntent().getLongExtra("playerID", 404);
         game = new Game();
         game.setNiveau(getIntent().getIntExtra("Level", 404));
         setTitle("Level " + game.getNiveau());
@@ -91,7 +96,7 @@ public class GameActivity extends AppCompatActivity {
                 if(selectColor == 0) {
                     Toast.makeText(getApplicationContext(), "Veuillez choisir la couleur de remplissage en premier", Toast.LENGTH_LONG).show();
                 }
-                if(selectColor == game.getListColors()[i] || winOrLose){
+                if(selectColor == 0 || selectColor == game.getListColors()[i] || winOrLose){
                     // Si la couleur sélectionnée est égale à la couleur de la case à remplir ou que le joueur a déjà gagné ou perdu => on ne fait rien
                 } else {
                     couleurCliquer = i;
@@ -116,7 +121,7 @@ public class GameActivity extends AppCompatActivity {
         gridButtonColor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                selectColor = diffColor[i];
+                selectColor = diffColor.get(i);
             }
         });
 
@@ -126,6 +131,7 @@ public class GameActivity extends AppCompatActivity {
     private void restartGame() {
         Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra("Level", game.getNiveau());
+        intent.putExtra("playerID", playerID);
         startActivity(intent);
     }
 
@@ -142,6 +148,15 @@ public class GameActivity extends AppCompatActivity {
             // deuxième case du tableau permet de savoir si le joueur a perdu ou pas
             result[0] = game.isWin();
             result[1] = game.isLose(result[0]);
+            // Si le joueur gagne on augmente le niveau et le score
+            if (playerID != 404 && result[0]){
+                dao = new PlayerDAO(getApplicationContext());
+                Player player = dao.getPlayer(playerID);
+                // On ne modifie le score que si seulement si le niveau actuel du joueur est <= au niveau
+                // ceci afin d'éviter d'augmenter le score à chaque fois que le joueur joue et gagne le même niveau
+                if(player.getNiveau() <= game.getNiveau())
+                    dao.updateScore_Level(playerID);
+            }
 
             return result;
         }
@@ -159,26 +174,7 @@ public class GameActivity extends AppCompatActivity {
                 game.setListColors(convertString(contains.get("colours")));
                 game.setNb_coup_max(Integer.valueOf(contains.get("NombreTentatives")));
                 game.setDiffCouleur(Integer.valueOf(contains.get("numColours")));
-                System.out.println("Diff color ---> " + game.getDiffCouleur());
-                if(game.getDiffCouleur() == 1){
-                    diffColor = new int[1];
-                    diffColor[0] = 1;
-                } else if(game.getDiffCouleur() == 2){
-                    diffColor = new int[2];
-                    diffColor[0] = 1;
-                    diffColor[1] = 2;
-                }else if(game.getDiffCouleur() == 3){
-                    diffColor = new int[3];
-                    diffColor[0] = 1;
-                    diffColor[1] = 2;
-                    diffColor[2] = 3;
-                } else if(game.getDiffCouleur() == 4){
-                    diffColor = new int[4];
-                    diffColor[0] = 1;
-                    diffColor[1] = 2;
-                    diffColor[2] = 3;
-                    diffColor[3] = 4;
-                }
+                diffColor = game.diffColorValue();
 
             } catch (IOException e) {
                 e.printStackTrace();

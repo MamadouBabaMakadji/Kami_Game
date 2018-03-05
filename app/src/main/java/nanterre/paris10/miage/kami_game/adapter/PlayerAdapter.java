@@ -37,7 +37,7 @@ public class PlayerAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return i;
+        return players.get(i);
     }
 
     @Override

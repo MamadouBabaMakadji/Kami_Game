@@ -1,5 +1,7 @@
 package nanterre.paris10.miage.kami_game.util;
 
+import java.util.ArrayList;
+
 /**
  * Created by MAKADJI Mamadou Baba on 03/03/2018.
  */
@@ -80,73 +82,33 @@ public class Game {
     }
 
     public void changeColor(int actualColor, int selectColor){
-        // Changement du couleur des cases du côté
-        parcoursCoteDroit(actualColor, selectColor);
-        parcoursCoteGauche(actualColor, selectColor);
-        // Changement du couleur des cases du bas
-        if(actualColor < listColors.length - 10 && listColors[actualColor + 10] != selectColor)
-            parcoursBas(actualColor, selectColor);
-        // Changement du couleur des cases du haut
-        if(actualColor >= 10 && listColors[actualColor - 10] != selectColor)
-            parcoursHaut(actualColor, selectColor);
-        //Changement du couleur des cases en oblique
-        if(actualColor < listColors.length - 11 && listColors[actualColor + 11] != selectColor)
-            parcoursObliqueBas(actualColor, selectColor);
-        if(actualColor >= 11 && listColors[actualColor - 11] != selectColor)
-            parcoursObliqueHaut(actualColor, selectColor);
-    }
-    // Les différents algo de parcours
-    // 1- Parcours toutes les cases à partir de la case selectionnée j'usqu'à la dernière case de la même couleur
-    private void parcoursCoteDroit(int actualColor, int selectColor){
-        int k = actualColor;
-        // Droite
-        do {
-            this.listColors[k] = selectColor;
-            k++;
-        }while(k < listColors.length && listColors[k] != selectColor);
+       algoParcours(actualColor, selectColor);
     }
 
-    private void parcoursCoteGauche(int actualColor, int selectColor){
-        int k = actualColor;
-        // Gauche
-        do {
-            this.listColors[k] = selectColor;
-            k--;
-        }while(k >= 0 && listColors[k] != selectColor);
+    // Va parcourir tout le puzzle et changer la case sélectionnée ainsi les cases reliées par la couleur selectionnée
+    // Vas faire un parcours en largeur, profondeur ... pour détecter les cases à changer
+    private void algoParcours (int actualColor, int selectColor){
+        int couleur_a_changer = listColors[actualColor];
+        for(int i = 0; i < listColors.length; i++){
+            if(listColors[i] == couleur_a_changer) {
+                int j = i;
+                do{
+                    listColors[j] = selectColor;
+                    j++;
+                }while(( j + 1 == actualColor || j - 1 == actualColor || j + 11 == actualColor || j + 10 == actualColor ||
+                        j - 10 == actualColor || j - 11 == actualColor) );
+            }
+        }
     }
 
-    // 2- Parcours toutes les cases à partir de la case selectionnée j'usqu'à la dernière case de la même couleur vers le bas
-    private void parcoursBas(int actualColor, int selectColor){
-        int k = actualColor;
-        do {
-            this.listColors[k] = selectColor;
-            k += 10;
-        }while(k < listColors.length && listColors[k] != selectColor);
-    }
+    public ArrayList<Integer> diffColorValue(){
+        ArrayList<Integer> res = new ArrayList<>();
+        for(int i = 0; i < listColors.length; i++){
+            if(! res.contains(listColors[i]))
+                res.add(listColors[i]);
+        }
 
-    // 3- Parcours toutes les cases à partir de la case selectionnée j'usqu'à la dernière case de la même couleur vers le haut
-    private void parcoursHaut(int actualColor, int selectColor){
-        int k = actualColor;
-        do {
-            this.listColors[k] = selectColor;
-            k -= 10;
-        }while(k >= 0 && listColors[k] != selectColor);
-    }
-
-    // 4- Parcours toutes les cases à partir de la case selectionnée j'usqu'à la dernière case de la même couleur obliquement
-    private void parcoursObliqueBas(int actualColor, int selectColor){
-        int k = actualColor;
-        do {
-            this.listColors[k] = selectColor;
-            k += 11;
-        }while(k < listColors.length && listColors[k] != selectColor);
-    }
-    private void parcoursObliqueHaut(int actualColor, int selectColor){
-        int k = actualColor;
-        do {
-            this.listColors[k] = selectColor;
-            k -= 11;
-        }while(k >= 0 && listColors[k] != selectColor);
+        return res;
     }
 
 }

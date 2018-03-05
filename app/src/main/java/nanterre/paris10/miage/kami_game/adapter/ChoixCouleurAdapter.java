@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import java.util.ArrayList;
+
 import nanterre.paris10.miage.kami_game.R;
 
 /**
@@ -17,16 +19,16 @@ import nanterre.paris10.miage.kami_game.R;
 public class ChoixCouleurAdapter extends BaseAdapter {
 
     private Context context;
-    private int[] listColors;
+    private ArrayList<Integer> listColors;
 
-    public ChoixCouleurAdapter(Context context, int[] listColors) {
+    public ChoixCouleurAdapter(Context context, ArrayList<Integer> listColors) {
         this.context = context;
         this.listColors = listColors;
     }
 
     @Override
     public int getCount() {
-        return listColors.length;
+        return listColors.size();
     }
 
     @Override
@@ -46,17 +48,17 @@ public class ChoixCouleurAdapter extends BaseAdapter {
             view = inflater.inflate(R.layout.button, null);
         }
         ImageView buttonView = view.findViewById(R.id.buttonView);
-        if(listColors[i] == 1){
-            buttonView.setBackgroundColor(Color.BLUE);
+        if(listColors.get(i) == 1){
+            buttonView.setBackgroundColor(Color.RED);
         }
-        else if(listColors[i] == 2) {
+        else if(listColors.get(i) == 2) {
             buttonView.setBackgroundColor(Color.YELLOW);
         }
-        else if(listColors[i] == 3) {
+        else if(listColors.get(i) == 3) {
             buttonView.setBackgroundColor(Color.GRAY);
 
         }
-        else if(listColors[i] == 4) {
+        else if(listColors.get(i) == 4) {
             buttonView.setBackgroundColor(Color.GREEN);
         }
 

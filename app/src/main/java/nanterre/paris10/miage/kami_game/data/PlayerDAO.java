@@ -69,4 +69,28 @@ public class PlayerDAO {
 
         return players;
     }
+
+    public Player getPlayer(long playerID){
+        SQLiteDatabase reader = mydataBase.getReadableDatabase();
+        Cursor cursor = reader.query(MydataBase.TABLE_NAME, colums, colums[0] + " = ?",
+                new String[]{String.valueOf(playerID)}, null, null, null );
+        cursor.moveToFirst();
+        Player player = new Player();
+        player.set_id(cursor.getLong(cursor.getColumnIndex(MydataBase.COlUMN_ID)));
+        player.setName(cursor.getString(cursor.getColumnIndex(MydataBase.COlUMN_NAME)));
+        player.setNiveau(cursor.getInt(cursor.getColumnIndex(MydataBase.COlUMN_LEVEL)));
+        player.setScore(cursor.getInt(cursor.getColumnIndex(MydataBase.COLUMN_SCORE)));
+        cursor.close();
+
+        return player;
+    }
+
+    public void updateScore_Level(long playerID) {
+        ContentValues contentValues = new ContentValues();
+        Player player = getPlayer(playerID);
+        contentValues.put(MydataBase.COlUMN_NAME, player.getName());
+        contentValues.put(MydataBase.COlUMN_LEVEL, player.getNiveau() + 1);
+        contentValues.put(MydataBase.COLUMN_SCORE, player.getScore() + 3);
+        mydataBase.getReadableDatabase().update(MydataBase.TABLE_NAME, contentValues, colums[0] + " = ?", new String[]{String.valueOf(playerID)});
+    }
 }

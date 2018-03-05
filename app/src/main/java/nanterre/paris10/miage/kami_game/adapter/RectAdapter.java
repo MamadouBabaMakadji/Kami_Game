@@ -47,7 +47,7 @@ public class RectAdapter extends BaseAdapter {
         }
         ImageView myRectView = view.findViewById(R.id.myRectView);
         if(listColors[i] == 1){
-            myRectView.setBackgroundColor(Color.BLUE);
+            myRectView.setBackgroundColor(Color.RED);
         }
         else if(listColors[i] == 2) {
             myRectView.setBackgroundColor(Color.YELLOW);
