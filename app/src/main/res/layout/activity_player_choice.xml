@@ -24,4 +24,12 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="72dp" />
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btn_newPlayer"
+        android:layout_toStartOf="@+id/btn_newPlayer"
+        app:srcCompat="@drawable/user" />
+
 </RelativeLayout>

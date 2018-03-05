@@ -17,16 +17,16 @@ import nanterre.paris10.miage.kami_game.R;
 public class LevelAdapter extends BaseAdapter {
 
     private Context context;
-    private int niveaux[];
+    private String levels[];
 
-    public LevelAdapter(Context context, int[] niveaux) {
+    public LevelAdapter(Context context, String[] levels) {
         this.context = context;
-        this.niveaux = niveaux;
+        this.levels = levels;
     }
 
     @Override
     public int getCount() {
-        return niveaux.length;
+        return levels.length;
     }
 
     @Override

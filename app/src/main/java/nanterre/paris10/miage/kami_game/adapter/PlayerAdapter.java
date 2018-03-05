@@ -57,7 +57,7 @@ public class PlayerAdapter extends BaseAdapter {
         TextView player_niveau = view.findViewById(R.id.player_niveau);
         byte[] bytes = players.get(i).getImage();
         if(bytes == null){
-            player_img.setImageResource(R.drawable.etoile);
+            player_img.setImageResource(R.drawable.profile);
         }else {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);

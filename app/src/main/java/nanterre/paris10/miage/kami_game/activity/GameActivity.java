@@ -14,21 +14,24 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+
 import nanterre.paris10.miage.kami_game.R;
 import nanterre.paris10.miage.kami_game.adapter.ChoixCouleurAdapter;
 import nanterre.paris10.miage.kami_game.adapter.RectAdapter;
 import nanterre.paris10.miage.kami_game.util.Game;
+import nanterre.paris10.miage.kami_game.util.XmlReader;
 
 public class GameActivity extends AppCompatActivity {
     private ImageButton img_btn_refresh;
     private ImageButton img_btn_info;
     private TextView nb_tentatives;
     private Game game;
-    private int nb_coup;
-    private int[] puzzle;
     private GridView gridView;
     private GridView gridButtonColor;
-    private int[] diffColor = new int[]{1,2};
+    private int[] diffColor;
     private int selectColor = 0;
     private RectAdapter adapter;
     private int nb_coup_max = 1;
@@ -39,12 +42,15 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        setTitle("Level 1");
-        nb_coup = 0;
-        puzzle = getPuzzle();
         game = new Game();
-        game.setListColors(puzzle);
-        game.setNb_coup_max(nb_coup_max);
+        game.setNiveau(getIntent().getIntExtra("Level", 404));
+        setTitle("Level " + game.getNiveau());
+        // Exécution de l'asyntask pour le remplissage des données dépuis le fichier XML
+        LoadDataTask loadDataTask = new LoadDataTask();
+        loadDataTask.doInBackground(null);
+        // On initialise le nombre de coups à 0
+        game.setNb_coup(0);
+        game.setListColors(game.getListColors());
         game.setNb_coup(0);
         img_btn_info = findViewById(R.id.btn_info);
         img_btn_refresh = findViewById(R.id.btn_refresh);
@@ -54,7 +60,7 @@ public class GameActivity extends AppCompatActivity {
         nb_tentatives.setText(game.getNb_coup() + "/" + game.getNb_coup_max());
         nb_tentatives.setTextSize(35);
         nb_tentatives.setTextColor(Color.BLACK);
-         adapter = new RectAdapter(getApplicationContext(), puzzle);
+        adapter = new RectAdapter(getApplicationContext(), game.getListColors());
         ChoixCouleurAdapter adapter2 = new ChoixCouleurAdapter(getApplicationContext(), diffColor);
         gridView.setAdapter(adapter);
         gridButtonColor.setAdapter(adapter2);
@@ -89,10 +95,10 @@ public class GameActivity extends AppCompatActivity {
                     // Si la couleur sélectionnée est égale à la couleur de la case à remplir ou que le joueur a déjà gagné ou perdu => on ne fait rien
                 } else {
                     couleurCliquer = i;
+                    game.setNb_coup(game.getNb_coup() + 1);
                     GameTask task = new GameTask();
                     //task.execute();
                     boolean[] resultGame = (boolean[]) task.doInBackground(null);
-                    game.setNb_coup(game.getNb_coup() + 1);
                     nb_tentatives.setText(game.getNb_coup() + "/" + game.getNb_coup_max());
                     adapter.notifyDataSetChanged();
                     if(resultGame[0]){
@@ -116,20 +122,13 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
-
+    // Recommencer la partie
     private void restartGame() {
         Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra("Level", game.getNiveau());
         startActivity(intent);
     }
 
-    private int[] getPuzzle() {
-        int[] grid = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,
-                2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-                2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
-
-        return grid;
-    }
 
     // Definition d'une asyncTask pour effectuer les opérations consommant énormémant de ressources dans un nouveau Thread
     private class GameTask extends AsyncTask {
@@ -145,6 +144,56 @@ public class GameActivity extends AppCompatActivity {
             result[1] = game.isLose(result[0]);
 
             return result;
+        }
+    }
+
+    // Le but de ce asyncTask est de charger les contenus du puzzle (Coulours, numColors ...) dépuis les fichiers XML
+    private class LoadDataTask extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            try {
+                InputStream inputStream = getAssets().open("StageA/SAL" + game.getNiveau() +".xml");
+                HashMap<String, String> contains = XmlReader.getXmlContains(inputStream);
+                // Initialisation du jeu avec le contenu du fichier XML
+                game.setListColors(convertString(contains.get("colours")));
+                game.setNb_coup_max(Integer.valueOf(contains.get("NombreTentatives")));
+                game.setDiffCouleur(Integer.valueOf(contains.get("numColours")));
+                System.out.println("Diff color ---> " + game.getDiffCouleur());
+                if(game.getDiffCouleur() == 1){
+                    diffColor = new int[1];
+                    diffColor[0] = 1;
+                } else if(game.getDiffCouleur() == 2){
+                    diffColor = new int[2];
+                    diffColor[0] = 1;
+                    diffColor[1] = 2;
+                }else if(game.getDiffCouleur() == 3){
+                    diffColor = new int[3];
+                    diffColor[0] = 1;
+                    diffColor[1] = 2;
+                    diffColor[2] = 3;
+                } else if(game.getDiffCouleur() == 4){
+                    diffColor = new int[4];
+                    diffColor[0] = 1;
+                    diffColor[1] = 2;
+                    diffColor[2] = 3;
+                    diffColor[3] = 4;
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        // Transforme la chaine de couleurs en tableau de int
+        public int[] convertString(String colors){
+            int[] res = new int[colors.length()];
+            for (int i = 0; i < res.length; i++){
+                res[i] = Integer.parseInt(String.valueOf(Character.getNumericValue(colors.charAt(i))));
+            }
+
+            return res;
         }
     }
 
