@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean winOrLose = false;
     private long playerID;
     private PlayerDAO dao;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,8 @@ public class GameActivity extends AppCompatActivity {
         game.setListColors(game.getListColors());
         game.setNb_coup(0);
         img_btn_info = findViewById(R.id.btn_info);
+        ImageButton btn_home = findViewById(R.id.home);
+        ImageButton btn_users = findViewById(R.id.user);
         img_btn_refresh = findViewById(R.id.btn_refresh);
         nb_tentatives = findViewById(R.id.textView_nb_tentative);
         gridView = findViewById(R.id.GridView);
@@ -122,6 +126,22 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 selectColor = diffColor.get(i);
+            }
+        });
+        // Retour à la page d'accueil en cliquant sur le bouton Home
+        btn_home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(GameActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        });
+        // Affichage des players au clic sur le bouton users
+        btn_users.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 intent = new Intent(GameActivity.this, PlayerChoiceActivity.class);
+                 startActivity(intent);
             }
         });
 
