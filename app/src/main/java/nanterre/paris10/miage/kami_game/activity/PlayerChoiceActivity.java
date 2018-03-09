@@ -41,6 +41,7 @@ public class PlayerChoiceActivity extends AppCompatActivity {
         gestionPlayer.onPreExecute();
         // Init adapter pour l'affichage
         adapter = new PlayerAdapter(this, players);
+        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         // Supprimer un joueur après un Long click
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

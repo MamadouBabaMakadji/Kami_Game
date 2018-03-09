@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by MAKADJI Mamadou Baba on 03/03/2018.
  */
 
-// Class pour l'activité du jeu
+// Class pour le jeu
 public class Game {
     private int nb_coup_max;
     private int nb_coup;
@@ -82,7 +82,8 @@ public class Game {
     }
 
     public void changeColor(int actualColor, int selectColor){
-       algoParcours(actualColor, selectColor);
+       //algoParcours(actualColor, selectColor);
+        changerVoisin(actualColor, selectColor);
     }
 
     // Va parcourir tout le puzzle et changer la case sélectionnée ainsi les cases reliées par la couleur selectionnée
@@ -99,6 +100,37 @@ public class Game {
                         j - 10 == actualColor || j - 11 == actualColor) );
             }
         }
+    }
+
+    // vérifie si une case a un voisin différent
+    private void changerVoisin(int item, int selectColor){
+        int couleur_a_changer = listColors[item];
+        int indice = item;
+        listColors[indice] = selectColor;
+            if(indice < listColors.length -1 && couleur_a_changer == listColors[indice+1]){
+                indice+=1;
+                changerVoisin(indice, selectColor);
+            }
+            if (indice > 0 && couleur_a_changer == listColors[indice - 1]){
+                indice-=1;
+                changerVoisin(indice, selectColor);
+            }
+            if (indice < listColors.length - 11 && couleur_a_changer == listColors[indice+11]){
+                indice+=11;
+                changerVoisin(indice, selectColor);
+            }
+            if (indice > 11 && couleur_a_changer == listColors[indice - 11]){
+                indice-=11;
+                changerVoisin(indice, selectColor);
+            }
+            if (indice < listColors.length - 10 &&couleur_a_changer == listColors[indice + 10]){
+                indice+=10;
+                changerVoisin(indice, selectColor);
+            }
+            if (indice > 10 && couleur_a_changer == listColors[indice - 10]){
+                indice -= 10;
+                changerVoisin(indice, selectColor);
+            }
     }
 
     public ArrayList<Integer> diffColorValue(){
